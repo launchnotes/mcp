@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+/**
+ * LaunchNotes MCP Server
+ *
+ * An MCP server for managing LaunchNotes projects through the GraphQL API.
+ * Provides tools for updating project settings, colors, custom code, and features.
+ *
+ * Runs in stdio mode for command-line MCP clients like Claude Desktop.
+ */
+
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { createClient } from "./shared/client.js";
+import { registerProjectTools } from "./projects/tools.js";
+import { registerAnnouncementTools } from "./announcements/tools.js";
+
+/**
+ * Factory function to create a configured MCP server instance
+ */
+function createServer(apiToken: string): McpServer {
+  // Create LaunchNotes client
+  const client = createClient(apiToken);
+
+  // Create MCP server with updated API
+  const server = new McpServer({
+    name: "@launchnotes/mcp",
+    version: "0.1.0",
+  });
+
+  // Register all project tools (Phase 1)
+  registerProjectTools(server, client);
+
+  // Register all announcement tools (Phase 2)
+  registerAnnouncementTools(server, client);
+
+  return server;
+}
+
+/**
+ * Start server in stdio mode (for command-line MCP clients)
+ */
+async function startStdio(apiToken: string) {
+  const server = createServer(apiToken);
+  const transport = new StdioServerTransport();
+
+  await server.connect(transport);
+
+  console.error("✓ LaunchNotes MCP Server running in stdio mode");
+  console.error("✓ Registered tools: 13 tools (6 project + 7 announcement)");
+}
+
+/**
+ * Main server initialization
+ */
+async function main() {
+  // Get API token from environment
+  const apiToken = process.env.LAUNCHNOTES_API_TOKEN;
+
+  if (!apiToken) {
+    console.error("Error: LAUNCHNOTES_API_TOKEN environment variable is required");
+    console.error("\nUsage:");
+    console.error("  export LAUNCHNOTES_API_TOKEN='your-token-here'");
+    console.error("  npm start");
+    process.exit(1);
+  }
+
+  await startStdio(apiToken);
+}
+
+// Start the server
+main().catch((error) => {
+  console.error("Failed to start LaunchNotes MCP Server:", error);
+  process.exit(1);
+});

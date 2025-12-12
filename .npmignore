@@ -1,0 +1,41 @@
+# Source files (only ship dist/)
+src/
+*.ts
+!*.d.ts
+tsconfig.json
+
+# Development files
+node_modules/
+.git/
+.gitignore
+.env
+.env.*
+
+# Documentation that's not needed in npm
+CLAUDE.md
+
+# Build artifacts
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+test/
+tests/
+*.test.js
+*.spec.js
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Misc
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,52 @@
+{
+  "name": "@launchnotes/mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the LaunchNotes API",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "launchnotes-mcp": "dist/index.js"
+  },
+  "files": ["dist", "README.md", "LICENSE", "USAGE.md"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "launchnotes",
+    "model-context-protocol",
+    "mcp-server",
+    "claude",
+    "announcement",
+    "project-management",
+    "graphql"
+  ],
+  "author": "LaunchNotes",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/launchnotes/mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/launchnotes/mcp/issues"
+  },
+  "homepage": "https://github.com/launchnotes/mcp#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "axios": "^1.7.9",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
