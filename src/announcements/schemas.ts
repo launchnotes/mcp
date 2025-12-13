@@ -22,6 +22,22 @@ const announcementStateSchema = z
   .describe("Filter by announcement state");
 
 /**
+ * Sort direction enum
+ */
+const sortDirectionSchema = z
+  .enum(["ASC", "DESC"])
+  .optional()
+  .describe("Sort direction: 'ASC' for ascending, 'DESC' for descending");
+
+/**
+ * Order by field enum
+ */
+const orderByFieldSchema = z
+  .enum(["publishedAt", "createdAt", "updatedAt"])
+  .optional()
+  .describe("Field to sort by");
+
+/**
  * Schema for launchnotes_list_announcements
  */
 export const ListAnnouncementsSchema = z
@@ -38,6 +54,8 @@ export const ListAnnouncementsSchema = z
       .default(50)
       .optional()
       .describe("Number of announcements to return (max 100)"),
+    order_by_field: orderByFieldSchema,
+    order_by_direction: sortDirectionSchema,
     response_format: responseFormatSchema,
   })
   .strict();

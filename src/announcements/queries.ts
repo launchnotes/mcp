@@ -7,9 +7,9 @@ import type { LaunchNotesAnnouncement, LaunchNotesAnnouncementList } from "./typ
 
 // GraphQL query strings
 export const LIST_ANNOUNCEMENTS_QUERY = `
-  query ListAnnouncements($projectId: ID!, $first: Int, $after: String) {
+  query ListAnnouncements($projectId: ID!, $first: Int, $after: String, $state: AnnouncementStateEnum, $orderBy: OrderBy) {
     project(id: $projectId) {
-      announcements(first: $first, after: $after) {
+      announcements(first: $first, after: $after, state: $state, orderBy: $orderBy) {
         nodes {
           id
           headline
@@ -53,6 +53,17 @@ export const GET_ANNOUNCEMENT_QUERY = `
         id
         name
         color
+      }
+      emailAnalytics {
+        sentCount
+        openRate
+        clickRate
+        clickToOpenRate
+      }
+      viewerAnalytics {
+        totalUniqueSubscribersCount
+        totalUniqueAnonymousCount
+        totalUniqueEmbeddedCount
       }
     }
   }
@@ -149,6 +160,8 @@ export async function listAnnouncements(
     state?: string;
     first?: number;
     after?: string;
+    orderByField?: string;
+    orderByDirection?: string;
   }
 ): Promise<{
   project: {
@@ -161,11 +174,26 @@ export async function listAnnouncements(
     };
   };
 }> {
-  return client.execute(LIST_ANNOUNCEMENTS_QUERY, {
+  const variables: Record<string, unknown> = {
     projectId,
     first: filters?.first || 50,
     after: filters?.after,
-  });
+  };
+
+  // Add state filter if provided
+  if (filters?.state) {
+    variables.state = filters.state;
+  }
+
+  // Add orderBy if field and direction are provided
+  if (filters?.orderByField && filters?.orderByDirection) {
+    variables.orderBy = {
+      field: filters.orderByField,
+      sort: filters.orderByDirection,
+    };
+  }
+
+  return client.execute(LIST_ANNOUNCEMENTS_QUERY, variables);
 }
 
 export async function getAnnouncement(

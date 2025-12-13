@@ -44,12 +44,14 @@ export function registerAnnouncementTools(
     "launchnotes_list_announcements",
     {
       title: "List LaunchNotes Announcements",
-      description: `List all announcements in a LaunchNotes project with optional filtering by state.
+      description: `List all announcements in a LaunchNotes project with optional filtering and ordering.
 
 Args:
   - project_id (string): The ID of the project
   - state ('draft' | 'scheduled' | 'published' | 'archived', optional): Filter by state
   - limit (number, optional): Number to return (max 100, default: 50)
+  - order_by_field ('publishedAt' | 'createdAt' | 'updatedAt', optional): Field to sort by
+  - order_by_direction ('ASC' | 'DESC', optional): Sort direction (ascending or descending)
   - response_format ('json' | 'markdown'): Output format (default: 'markdown')
 
 Returns:
@@ -57,9 +59,12 @@ Returns:
 
 Use Cases:
   - "List all announcements in my LaunchNotes project"
-  - "Show me all published announcements"
+  - "Show me all published announcements ordered by published date"
   - "List draft announcements"
-  - "Show scheduled announcements"
+  - "Show scheduled announcements sorted by creation date descending"
+
+Note: To use ordering, both order_by_field and order_by_direction must be specified.
+Default ordering (when not specified) is by updatedAt descending.
 
 Error Handling:
   - Returns "Project not found" if project ID doesn't exist
@@ -77,6 +82,8 @@ Error Handling:
         const result = await listAnnouncements(client, params.project_id, {
           state: params.state,
           first: params.limit,
+          orderByField: params.order_by_field,
+          orderByDirection: params.order_by_direction,
         });
 
         const announcements = result.project.announcements.nodes;
