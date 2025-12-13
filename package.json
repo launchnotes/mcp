@@ -12,7 +12,11 @@
     "build": "tsc",
     "prepublishOnly": "npm run build",
     "start": "node dist/index.js",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "test": "npm run build && tsx tests/run.ts",
+    "test:schema": "npm run build && tsx tests/run.ts --schema-only",
+    "test:unit": "npm run build && tsx tests/run.ts --unit-only",
+    "test:watch": "tsx --watch tests/run.ts"
   },
   "keywords": [
     "mcp",
@@ -47,6 +51,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
+    "graphql": "^16.9.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }

@@ -21,6 +21,13 @@ An MCP (Model Context Protocol) server for managing LaunchNotes projects and ann
 - Schedule announcements for future publication
 - Archive announcements
 
+**Feedback Management (2 tools)** 🆕
+- Search and filter customer feedback
+- Get complete feedback details with customer info
+
+**Analytics (1 tool)** 🆕
+- Get top-performing announcements by various metrics
+
 ## Installation
 
 ### From npm (Recommended)
@@ -258,6 +265,115 @@ Enable or disable features for a project.
 - "Enable feedback collection for my project"
 - "Turn on the roadmap feature"
 - "Disable RSS feed"
+
+---
+
+### 7. `launchnotes_search_feedback` 🆕
+
+Search and filter customer feedback in a LaunchNotes project.
+
+**Parameters:**
+- `project_id` (string, required): The ID of the project
+- `query` (string, optional): Search term to find in feedback content
+- `reaction` ('happy' | 'meh' | 'sad', optional): Filter by customer sentiment
+- `importance` ('low' | 'medium' | 'high', optional): Filter by importance level
+- `organized_state` (string, optional): Filter by state ('organized', 'unorganized', 'announcement', 'idea', 'roadmap')
+- `start_date` (string, optional): Filter feedback created after this date (ISO 8601)
+- `end_date` (string, optional): Filter feedback created before this date (ISO 8601)
+- `limit` (number, optional): Number to return (max 100, default: 20)
+- `response_format` ('json' | 'markdown', optional): Output format (default: 'markdown')
+
+**Example:**
+```json
+{
+  "project_id": "proj_123",
+  "query": "Digests",
+  "reaction": "sad",
+  "importance": "high",
+  "limit": 10
+}
+```
+
+**Use cases:**
+- "What are customers saying about Digests?"
+- "Show me all unhappy feedback from last month"
+- "Find high importance feedback that's unorganized"
+- "Search feedback containing 'API integration'"
+
+---
+
+### 8. `launchnotes_get_feedback` 🆕
+
+Get complete details for a specific feedback item including customer info and associations.
+
+**Parameters:**
+- `feedback_id` (string, required): The ID of the feedback item
+- `response_format` ('json' | 'markdown', optional): Output format (default: 'markdown')
+
+**Example:**
+```json
+{
+  "feedback_id": "fb_abc123",
+  "response_format": "markdown"
+}
+```
+
+**Returns:**
+- Content and internal notes
+- Sentiment (reaction) and importance
+- Affected customer information
+- Reporter information
+- Associated announcement/idea/work item
+- Timestamps
+
+**Use cases:**
+- "Show me details for feedback #abc123"
+- "Get the full context of this feedback item"
+- "What announcement is this feedback associated with?"
+
+---
+
+### 9. `launchnotes_get_top_announcements` 🆕
+
+Get top-performing announcements ranked by various metrics over a specified timeframe.
+
+**Parameters:**
+- `project_id` (string, required): The ID of the project
+- `timeframe` ('week' | 'month' | 'quarter' | 'year', required): Time period
+- `start_date` (string, optional): Custom start date (ISO 8601) - overrides timeframe
+- `end_date` (string, optional): Custom end date (ISO 8601) - overrides timeframe
+- `metric` (enum, optional, default: 'engagement'): Ranking metric
+  - `'engagement'` - Total views + opens + clicks (most comprehensive)
+  - `'open_rate'` - Email open rate (email performance)
+  - `'click_rate'` - Email click rate (engagement depth)
+  - `'feedback_count'` - Number of feedback items (customer response)
+  - `'feedback_sentiment'` - Average sentiment score (customer satisfaction)
+- `limit` (number, optional): Number of results (max 50, default: 10)
+- `response_format` ('json' | 'markdown', optional): Output format (default: 'markdown')
+
+**Example:**
+```json
+{
+  "project_id": "proj_123",
+  "timeframe": "quarter",
+  "metric": "engagement",
+  "limit": 5
+}
+```
+
+**Returns:**
+Ranked list of announcements with:
+- Announcement details (ID, headline, slug, publish date)
+- Primary metric value
+- All other available metrics (views, opens, clicks, rates, feedback)
+
+**Use cases:**
+- "Which announcements performed best this quarter?"
+- "Show me top 5 announcements by email open rate this month"
+- "What got the most feedback in the last week?"
+- "Which announcements had the best sentiment this year?"
+
+---
 
 ## Complete Usage Example
 

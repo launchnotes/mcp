@@ -202,12 +202,11 @@ Error Handling:
 Args:
   - project_id (string): The ID of the project
   - headline (string): The main headline/title (required)
-  - content (string, optional): Full content/body (supports Markdown)
-  - title (string, optional): SEO title (defaults to headline)
-  - description (string, optional): Meta description for SEO
-  - excerpt (string, optional): Short excerpt or summary
-  - category_ids (array, optional): Array of category IDs
-  - change_type_ids (array, optional): Array of change type (label) IDs
+  - content_markdown (string, optional): Content in Markdown format
+  - content_html (string, optional): Content in HTML format
+  - content_jira (string, optional): Content in Jira Wiki Syntax
+
+Note: Provide only ONE content format. If multiple are provided, the API will use contentMarkdown > contentHtml > contentJira in order of precedence.
 
 Returns:
   Created announcement with ID, headline, state, and creation timestamp
@@ -235,15 +234,12 @@ Error Handling:
           headline: params.headline,
         };
 
-        if (params.content !== undefined) attributes.content = params.content;
-        if (params.title !== undefined) attributes.title = params.title;
-        if (params.description !== undefined)
-          attributes.description = params.description;
-        if (params.excerpt !== undefined) attributes.excerpt = params.excerpt;
-        if (params.category_ids !== undefined)
-          attributes.categoryIds = params.category_ids;
-        if (params.change_type_ids !== undefined)
-          attributes.changeTypeIds = params.change_type_ids;
+        if (params.content_markdown !== undefined)
+          attributes.contentMarkdown = params.content_markdown;
+        if (params.content_html !== undefined)
+          attributes.contentHtml = params.content_html;
+        if (params.content_jira !== undefined)
+          attributes.contentJira = params.content_jira;
 
         const result = await createAnnouncement(client,
           params.project_id,
@@ -294,12 +290,14 @@ Error Handling:
 Args:
   - announcement_id (string): The ID of the announcement to update
   - headline (string, optional): Update the headline/title
-  - content (string, optional): Update the content/body (supports Markdown)
+  - content (string, optional): Update the content/body (must be in LaunchNotes JSON format, not Markdown)
   - title (string, optional): Update SEO title
   - description (string, optional): Update meta description
   - excerpt (string, optional): Update excerpt/summary
   - category_ids (array, optional): Replace category assignments
   - change_type_ids (array, optional): Replace change type (label) assignments
+
+Note: The 'content' field requires LaunchNotes' internal JSON format. For creating announcements with Markdown, use the create_announcement tool with content_markdown.
 
 At least one field must be provided. Fields not specified will remain unchanged.
 
@@ -308,9 +306,8 @@ Returns:
 
 Use Cases:
   - "Update the headline of announcement abc123"
-  - "Change the content of my announcement"
-  - "Add categories to announcement xyz"
   - "Update the excerpt"
+  - "Add categories to announcement xyz"
 
 Error Handling:
   - Returns validation error if no fields provided
@@ -464,18 +461,20 @@ Error Handling:
 Args:
   - announcement_id (string): The ID of the announcement to schedule
   - scheduled_at (string): When to publish (ISO 8601 format, must be in future)
+  - scheduled_at_timezone (string, optional): Timezone (e.g., 'America/New_York', 'UTC'). Defaults to UTC.
 
 Returns:
   Confirmation with scheduled announcement details and scheduled publish time
 
 Use Cases:
   - "Schedule announcement for tomorrow at 9am"
-  - "Set announcement to publish on December 25th at noon"
-  - "Schedule for next Monday"
+  - "Set announcement to publish on December 25th at noon EST"
+  - "Schedule for next Monday at 3pm in New York timezone"
 
 Examples of scheduled_at format:
   - "2025-12-25T12:00:00Z" (UTC time)
-  - "2025-12-25T09:00:00-05:00" (EST)
+  - "2025-12-25T09:00:00-05:00" (EST - with timezone offset)
+  - "2025-12-25T09:00:00" with scheduled_at_timezone: "America/New_York"
 
 Notes:
   - Announcement will automatically publish at the scheduled time
@@ -496,9 +495,11 @@ Error Handling:
     },
     async (params: ScheduleAnnouncementInput) => {
       try {
-        const result = await scheduleAnnouncement(client,
+        const result = await scheduleAnnouncement(
+          client,
           params.announcement_id,
-          params.scheduled_at
+          params.scheduled_at,
+          params.scheduled_at_timezone
         );
 
         if (

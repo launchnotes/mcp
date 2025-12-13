@@ -14,6 +14,8 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { createClient } from "./shared/client.js";
 import { registerProjectTools } from "./projects/tools.js";
 import { registerAnnouncementTools } from "./announcements/tools.js";
+import { registerFeedbackTools } from "./feedback/tools.js";
+import { registerAnalyticsTools } from "./analytics/tools.js";
 
 /**
  * Factory function to create a configured MCP server instance
@@ -28,11 +30,17 @@ function createServer(apiToken: string): McpServer {
     version: "0.1.0",
   });
 
-  // Register all project tools (Phase 1)
+  // Register all project tools
   registerProjectTools(server, client);
 
-  // Register all announcement tools (Phase 2)
+  // Register all announcement tools
   registerAnnouncementTools(server, client);
+
+  // Register all feedback tools (Phase 1 MVP)
+  registerFeedbackTools(server, client);
+
+  // Register all analytics tools (Phase 1 MVP)
+  registerAnalyticsTools(server, client);
 
   return server;
 }
@@ -47,7 +55,7 @@ async function startStdio(apiToken: string) {
   await server.connect(transport);
 
   console.error("✓ LaunchNotes MCP Server running in stdio mode");
-  console.error("✓ Registered tools: 13 tools (6 project + 7 announcement)");
+  console.error("✓ Registered tools: 16 tools (6 project + 7 announcement + 2 feedback + 1 analytics)");
 }
 
 /**

@@ -117,8 +117,10 @@ export async function updateProject(
 }> {
   return client.execute(UPDATE_PROJECT_MUTATION, {
     input: {
-      id: projectId,
-      project: attributes,
+      project: {
+        id: projectId,
+        ...attributes,
+      },
     },
   });
 }

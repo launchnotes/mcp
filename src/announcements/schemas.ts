@@ -72,30 +72,18 @@ export const CreateAnnouncementSchema = z
       .string()
       .min(1, "Headline is required")
       .describe("The main headline/title of the announcement"),
-    content: z
+    content_markdown: z
       .string()
       .optional()
-      .describe("The full content/body of the announcement (supports Markdown)"),
-    title: z
+      .describe("The full content/body of the announcement in Markdown format"),
+    content_html: z
       .string()
       .optional()
-      .describe("Optional SEO title (defaults to headline if not provided)"),
-    description: z
+      .describe("The full content/body of the announcement in HTML format"),
+    content_jira: z
       .string()
       .optional()
-      .describe("Optional meta description for SEO"),
-    excerpt: z
-      .string()
-      .optional()
-      .describe("Short excerpt or summary"),
-    category_ids: z
-      .array(z.string())
-      .optional()
-      .describe("Array of category IDs to assign"),
-    change_type_ids: z
-      .array(z.string())
-      .optional()
-      .describe("Array of change type (label) IDs to assign"),
+      .describe("The full content/body of the announcement in Jira Wiki Syntax"),
   })
   .strict();
 
@@ -118,7 +106,7 @@ export const UpdateAnnouncementSchema = z
     content: z
       .string()
       .optional()
-      .describe("The full content/body of the announcement (supports Markdown)"),
+      .describe("The full content/body of the announcement in JSON format (LaunchNotes rich text format)"),
     title: z
       .string()
       .optional()
@@ -196,6 +184,10 @@ export const ScheduleAnnouncementSchema = z
         }
       )
       .describe("When to publish the announcement (ISO 8601 format, must be in the future)"),
+    scheduled_at_timezone: z
+      .string()
+      .optional()
+      .describe("Timezone for the scheduled time (e.g., 'America/New_York', 'UTC'). Defaults to UTC if not provided."),
   })
   .strict();
 

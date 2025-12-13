@@ -247,7 +247,7 @@ export async function publishAnnouncement(
 }> {
   return client.execute(PUBLISH_ANNOUNCEMENT_MUTATION, {
     input: {
-      id: announcementId,
+      announcementId: announcementId,
     },
   });
 }
@@ -255,7 +255,8 @@ export async function publishAnnouncement(
 export async function scheduleAnnouncement(
   client: GraphQLClient,
   announcementId: string,
-  scheduledAt: string
+  scheduledAt: string,
+  scheduledAtTimezone?: string
 ): Promise<{
   scheduleAnnouncement: {
     announcement?: {
@@ -270,11 +271,17 @@ export async function scheduleAnnouncement(
     }>;
   };
 }> {
+  const input: Record<string, string> = {
+    announcementId: announcementId,
+    scheduledAt: scheduledAt,
+  };
+
+  if (scheduledAtTimezone) {
+    input.scheduledAtTimezone = scheduledAtTimezone;
+  }
+
   return client.execute(SCHEDULE_ANNOUNCEMENT_MUTATION, {
-    input: {
-      id: announcementId,
-      scheduledAt,
-    },
+    input,
   });
 }
 
@@ -296,7 +303,7 @@ export async function archiveAnnouncement(
 }> {
   return client.execute(ARCHIVE_ANNOUNCEMENT_MUTATION, {
     input: {
-      id: announcementId,
+      announcementId: announcementId,
     },
   });
 }
