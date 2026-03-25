@@ -3,7 +3,7 @@
  */
 
 import axios, { AxiosError } from "axios";
-import { API_URL } from "./constants.js";
+import { API_URL, MCP_USER_AGENT, MCP_VERSION } from "./constants.js";
 import type { GraphQLResponse, GraphQLError } from "./types.js";
 
 export class GraphQLClient {
@@ -14,9 +14,13 @@ export class GraphQLClient {
   }
 
   /**
-   * Execute a GraphQL query or mutation
+   * Execute a GraphQL query or mutation with optional tracking headers
    */
-  async execute<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
+  async execute<T>(
+    query: string,
+    variables?: Record<string, unknown>,
+    additionalHeaders?: Record<string, string>
+  ): Promise<T> {
     try {
       const response = await axios.post<GraphQLResponse<T>>(
         API_URL,
@@ -28,6 +32,10 @@ export class GraphQLClient {
           headers: {
             "Authorization": `Bearer ${this.apiToken}`,
             "Content-Type": "application/json",
+            "User-Agent": MCP_USER_AGENT,
+            "X-LN-Client": "mcp",
+            "X-LN-Client-Version": MCP_VERSION,
+            ...additionalHeaders,
           },
           timeout: 30000,
         }

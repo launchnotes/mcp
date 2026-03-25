@@ -84,7 +84,7 @@ Error Handling:
           first: params.limit,
           orderByField: params.order_by_field,
           orderByDirection: params.order_by_direction,
-        });
+        }, "launchnotes_list_announcements");
 
         const announcements = result.project.announcements.nodes;
 
@@ -162,7 +162,7 @@ Error Handling:
     },
     async (params: GetAnnouncementInput) => {
       try {
-        const result = await getAnnouncement(client, params.announcement_id);
+        const result = await getAnnouncement(client, params.announcement_id, "launchnotes_get_announcement");
         const announcement = result.announcement;
 
         if (params.response_format === RESPONSE_FORMAT.JSON) {
@@ -250,7 +250,8 @@ Error Handling:
 
         const result = await createAnnouncement(client,
           params.project_id,
-          attributes
+          attributes,
+          "launchnotes_create_announcement"
         );
 
         if (
@@ -346,7 +347,7 @@ Error Handling:
         if (params.change_type_ids !== undefined)
           attributes.changeTypeIds = params.change_type_ids;
 
-        const result = await updateAnnouncement(client, attributes);
+        const result = await updateAnnouncement(client, attributes, "launchnotes_update_announcement");
 
         if (
           result.updateAnnouncement.errors &&
@@ -422,7 +423,7 @@ Error Handling:
     },
     async (params: PublishAnnouncementInput) => {
       try {
-        const result = await publishAnnouncement(client, params.announcement_id);
+        const result = await publishAnnouncement(client, params.announcement_id, "launchnotes_publish_announcement");
 
         if (
           result.publishAnnouncement.errors &&
@@ -506,7 +507,8 @@ Error Handling:
           client,
           params.announcement_id,
           params.scheduled_at,
-          params.scheduled_at_timezone
+          params.scheduled_at_timezone,
+          "launchnotes_schedule_announcement"
         );
 
         if (
@@ -581,7 +583,7 @@ Error Handling:
     },
     async (params: ArchiveAnnouncementInput) => {
       try {
-        const result = await archiveAnnouncement(client, params.announcement_id);
+        const result = await archiveAnnouncement(client, params.announcement_id, "launchnotes_archive_announcement");
 
         if (
           result.archiveAnnouncement.errors &&

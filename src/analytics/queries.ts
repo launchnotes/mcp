@@ -49,7 +49,8 @@ export const GET_TOP_ANNOUNCEMENTS_QUERY = `
 // Operation function
 export async function getTopAnnouncements(
   client: GraphQLClient,
-  filters: TopAnnouncementsFilters
+  filters: TopAnnouncementsFilters,
+  toolName?: string
 ): Promise<AnnouncementAnalytics[]> {
   const result = await client.execute<{
     project: {
@@ -77,10 +78,14 @@ export async function getTopAnnouncements(
         }>;
       };
     };
-  }>(GET_TOP_ANNOUNCEMENTS_QUERY, {
-    projectId: filters.projectId,
-    limit: filters.limit || 10,
-  });
+  }>(
+    GET_TOP_ANNOUNCEMENTS_QUERY,
+    {
+      projectId: filters.projectId,
+      limit: filters.limit || 10,
+    },
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 
   // Transform data and calculate engagement scores
   const announcements = result.project.announcements.nodes.map((node) => {
