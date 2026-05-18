@@ -34,6 +34,7 @@ if (values['schema-only']) {
     'tests/projects.test.ts',
     'tests/feedback.test.ts',
     'tests/analytics.test.ts',
+    'tests/templates.test.ts',
   ];
 } else {
   console.log('🚀 Running all tests...');
@@ -45,6 +46,7 @@ if (values['schema-only']) {
     'tests/projects.test.ts',
     'tests/feedback.test.ts',
     'tests/analytics.test.ts',
+    'tests/templates.test.ts',
   ];
 }
 

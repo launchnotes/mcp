@@ -48,6 +48,19 @@ export const MockFactory = {
     };
   },
 
+  template(overrides: Partial<any> = {}) {
+    return {
+      id: 'tpl_mock123',
+      name: 'Test Template',
+      headline: 'Test Headline',
+      description: 'Test template description',
+      excerpt: 'Test excerpt',
+      createdAt: '2025-01-01T00:00:00Z',
+      updatedAt: '2025-01-01T00:00:00Z',
+      ...overrides,
+    };
+  },
+
   announcementAnalytics(overrides: Partial<any> = {}) {
     return {
       id: 'ann_analytics_123',

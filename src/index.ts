@@ -17,6 +17,7 @@ import { registerProjectTools } from "./projects/tools.js";
 import { registerAnnouncementTools } from "./announcements/tools.js";
 import { registerFeedbackTools } from "./feedback/tools.js";
 import { registerAnalyticsTools } from "./analytics/tools.js";
+import { registerTemplateTools } from "./templates/tools.js";
 
 /**
  * Factory function to create a configured MCP server instance
@@ -43,6 +44,9 @@ function createServer(apiToken: string): McpServer {
   // Register all analytics tools (Phase 1 MVP)
   registerAnalyticsTools(server, client);
 
+  // Register all template tools
+  registerTemplateTools(server, client);
+
   return server;
 }
 
@@ -56,7 +60,7 @@ async function startStdio(apiToken: string) {
   await server.connect(transport);
 
   console.error("✓ LaunchNotes MCP Server running in stdio mode");
-  console.error("✓ Registered tools: 16 tools (6 project + 7 announcement + 2 feedback + 1 analytics)");
+  console.error("✓ Registered tools: 17 tools (6 project + 7 announcement + 2 feedback + 1 analytics + 1 template)");
 }
 
 /**
