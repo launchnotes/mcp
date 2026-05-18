@@ -32,6 +32,9 @@ import {
 import {
   GET_TOP_ANNOUNCEMENTS_QUERY,
 } from '../src/analytics/queries.js';
+import {
+  LIST_TEMPLATES_QUERY,
+} from '../src/templates/queries.js';
 
 describe('Schema Validation (Live Schema)', () => {
   let schema: GraphQLSchema;
@@ -211,6 +214,26 @@ describe('Schema Validation (Live Schema)', () => {
       assert.ok(
         GET_TOP_ANNOUNCEMENTS_QUERY.includes('feedbackSadCount'),
         'Should use feedbackSadCount field'
+      );
+    });
+  });
+
+  describe('Template Queries', () => {
+    it('LIST_TEMPLATES_QUERY is valid against live schema', () => {
+      const document = parse(LIST_TEMPLATES_QUERY);
+      const errors = validate(schema, document);
+
+      assert.strictEqual(
+        errors.length,
+        0,
+        `Validation errors: ${errors.map(e => e.message).join(', ')}`
+      );
+    });
+
+    it('LIST_TEMPLATES_QUERY filters out archived templates', () => {
+      assert.ok(
+        LIST_TEMPLATES_QUERY.includes('archived: false'),
+        'Should filter archived: false at the GraphQL level'
       );
     });
   });
