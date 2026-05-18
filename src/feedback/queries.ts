@@ -100,7 +100,8 @@ export const GET_FEEDBACK_QUERY = `
 // Operation functions
 export async function searchFeedback(
   client: GraphQLClient,
-  filters: SearchFeedbackFilters
+  filters: SearchFeedbackFilters,
+  toolName?: string
 ): Promise<{
   project: {
     feedbacks: {
@@ -112,24 +113,33 @@ export async function searchFeedback(
     };
   };
 }> {
-  return client.execute(SEARCH_FEEDBACK_QUERY, {
-    projectId: filters.projectId,
-    searchTerm: filters.query,
-    reaction: filters.reaction,
-    importance: filters.importance,
-    organizedState: filters.organizedState,
-    starred: filters.starred,
-    archived: filters.archived,
-    first: filters.first || 20,
-    after: filters.after,
-  });
+  return client.execute(
+    SEARCH_FEEDBACK_QUERY,
+    {
+      projectId: filters.projectId,
+      searchTerm: filters.query,
+      reaction: filters.reaction,
+      importance: filters.importance,
+      organizedState: filters.organizedState,
+      starred: filters.starred,
+      archived: filters.archived,
+      first: filters.first || 20,
+      after: filters.after,
+    },
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
 
 export async function getFeedback(
   client: GraphQLClient,
-  feedbackId: string
+  feedbackId: string,
+  toolName?: string
 ): Promise<{
   feedback: LaunchNotesFeedback;
 }> {
-  return client.execute(GET_FEEDBACK_QUERY, { id: feedbackId });
+  return client.execute(
+    GET_FEEDBACK_QUERY,
+    { id: feedbackId },
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }

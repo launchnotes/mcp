@@ -71,7 +71,7 @@ Error Handling:
           starred: params.starred,
           archived: params.archived,
           first: params.limit,
-        });
+        }, "launchnotes_search_feedback");
 
         const feedbacks = result.project.feedbacks.nodes;
 
@@ -155,7 +155,7 @@ Error Handling:
     },
     async (params: GetFeedbackInput) => {
       try {
-        const result = await getFeedback(client, params.feedback_id);
+        const result = await getFeedback(client, params.feedback_id, "launchnotes_get_feedback");
         const feedback = result.feedback;
 
         if (params.response_format === RESPONSE_FORMAT.JSON) {

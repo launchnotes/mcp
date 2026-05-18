@@ -69,7 +69,7 @@ Error Handling:
           projectId: params.project_id,
           metric: params.metric || "engagement",
           limit: params.limit,
-        });
+        }, "launchnotes_get_top_announcements");
 
         if (params.response_format === RESPONSE_FORMAT.JSON) {
           return {

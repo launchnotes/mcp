@@ -79,15 +79,21 @@ export const UPDATE_PROJECT_MUTATION = `
 // Operation functions
 export async function getProject(
   client: GraphQLClient,
-  projectId: string
+  projectId: string,
+  toolName?: string
 ): Promise<{
   project: LaunchNotesProject;
 }> {
-  return client.execute(GET_PROJECT_QUERY, { id: projectId });
+  return client.execute(
+    GET_PROJECT_QUERY,
+    { id: projectId },
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
 
 export async function listProjects(
-  client: GraphQLClient
+  client: GraphQLClient,
+  toolName?: string
 ): Promise<{
   viewer: {
     projects: {
@@ -95,13 +101,18 @@ export async function listProjects(
     };
   };
 }> {
-  return client.execute(LIST_PROJECTS_QUERY);
+  return client.execute(
+    LIST_PROJECTS_QUERY,
+    undefined,
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
 
 export async function updateProject(
   client: GraphQLClient,
   projectId: string,
-  attributes: Record<string, unknown>
+  attributes: Record<string, unknown>,
+  toolName?: string
 ): Promise<{
   updateProject: {
     project?: {
@@ -115,12 +126,16 @@ export async function updateProject(
     }>;
   };
 }> {
-  return client.execute(UPDATE_PROJECT_MUTATION, {
-    input: {
-      project: {
-        id: projectId,
-        ...attributes,
+  return client.execute(
+    UPDATE_PROJECT_MUTATION,
+    {
+      input: {
+        project: {
+          id: projectId,
+          ...attributes,
+        },
       },
     },
-  });
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }

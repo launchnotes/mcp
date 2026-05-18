@@ -162,7 +162,8 @@ export async function listAnnouncements(
     after?: string;
     orderByField?: string;
     orderByDirection?: string;
-  }
+  },
+  toolName?: string
 ): Promise<{
   project: {
     announcements: {
@@ -193,22 +194,32 @@ export async function listAnnouncements(
     };
   }
 
-  return client.execute(LIST_ANNOUNCEMENTS_QUERY, variables);
+  return client.execute(
+    LIST_ANNOUNCEMENTS_QUERY,
+    variables,
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
 
 export async function getAnnouncement(
   client: GraphQLClient,
-  announcementId: string
+  announcementId: string,
+  toolName?: string
 ): Promise<{
   announcement: LaunchNotesAnnouncement;
 }> {
-  return client.execute(GET_ANNOUNCEMENT_QUERY, { id: announcementId });
+  return client.execute(
+    GET_ANNOUNCEMENT_QUERY,
+    { id: announcementId },
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
 
 export async function createAnnouncement(
   client: GraphQLClient,
   projectId: string,
-  attributes: Record<string, unknown>
+  attributes: Record<string, unknown>,
+  toolName?: string
 ): Promise<{
   createAnnouncement: {
     announcement?: {
@@ -223,19 +234,24 @@ export async function createAnnouncement(
     }>;
   };
 }> {
-  return client.execute(CREATE_ANNOUNCEMENT_MUTATION, {
-    input: {
-      announcement: {
-        projectId,
-        ...attributes,
+  return client.execute(
+    CREATE_ANNOUNCEMENT_MUTATION,
+    {
+      input: {
+        announcement: {
+          projectId,
+          ...attributes,
+        },
       },
     },
-  });
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
 
 export async function updateAnnouncement(
   client: GraphQLClient,
-  attributes: Record<string, unknown>
+  attributes: Record<string, unknown>,
+  toolName?: string
 ): Promise<{
   updateAnnouncement: {
     announcement?: {
@@ -249,16 +265,21 @@ export async function updateAnnouncement(
     }>;
   };
 }> {
-  return client.execute(UPDATE_ANNOUNCEMENT_MUTATION, {
-    input: {
-      announcement: attributes,
+  return client.execute(
+    UPDATE_ANNOUNCEMENT_MUTATION,
+    {
+      input: {
+        announcement: attributes,
+      },
     },
-  });
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
 
 export async function publishAnnouncement(
   client: GraphQLClient,
-  announcementId: string
+  announcementId: string,
+  toolName?: string
 ): Promise<{
   publishAnnouncement: {
     announcement?: {
@@ -273,18 +294,23 @@ export async function publishAnnouncement(
     }>;
   };
 }> {
-  return client.execute(PUBLISH_ANNOUNCEMENT_MUTATION, {
-    input: {
-      announcementId: announcementId,
+  return client.execute(
+    PUBLISH_ANNOUNCEMENT_MUTATION,
+    {
+      input: {
+        announcementId: announcementId,
+      },
     },
-  });
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
 
 export async function scheduleAnnouncement(
   client: GraphQLClient,
   announcementId: string,
   scheduledAt: string,
-  scheduledAtTimezone?: string
+  scheduledAtTimezone?: string,
+  toolName?: string
 ): Promise<{
   scheduleAnnouncement: {
     announcement?: {
@@ -308,14 +334,19 @@ export async function scheduleAnnouncement(
     input.scheduledAtTimezone = scheduledAtTimezone;
   }
 
-  return client.execute(SCHEDULE_ANNOUNCEMENT_MUTATION, {
-    input,
-  });
+  return client.execute(
+    SCHEDULE_ANNOUNCEMENT_MUTATION,
+    {
+      input,
+    },
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
 
 export async function archiveAnnouncement(
   client: GraphQLClient,
-  announcementId: string
+  announcementId: string,
+  toolName?: string
 ): Promise<{
   archiveAnnouncement: {
     announcement?: {
@@ -329,9 +360,13 @@ export async function archiveAnnouncement(
     }>;
   };
 }> {
-  return client.execute(ARCHIVE_ANNOUNCEMENT_MUTATION, {
-    input: {
-      announcementId: announcementId,
+  return client.execute(
+    ARCHIVE_ANNOUNCEMENT_MUTATION,
+    {
+      input: {
+        announcementId: announcementId,
+      },
     },
-  });
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }

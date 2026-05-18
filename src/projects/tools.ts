@@ -59,7 +59,7 @@ Error Handling:
     },
     async (params: GetProjectInput) => {
       try {
-        const result = await getProject(client, params.project_id);
+        const result = await getProject(client, params.project_id, "launchnotes_get_project");
         const project = result.project;
 
         if (params.response_format === RESPONSE_FORMAT.JSON) {
@@ -126,7 +126,7 @@ Error Handling:
     },
     async (params: ListProjectsInput) => {
       try {
-        const result = await listProjects(client);
+        const result = await listProjects(client, "launchnotes_list_projects");
         const projects = result.viewer.projects.nodes;
 
         if (params.response_format === RESPONSE_FORMAT.JSON) {
@@ -218,7 +218,7 @@ Error Handling:
         if (params.custom_footer !== undefined) attributes.customFooter = params.custom_footer;
         if (params.custom_index_hero !== undefined) attributes.customIndexHero = params.custom_index_hero;
 
-        const result = await updateProject(client, params.project_id, attributes);
+        const result = await updateProject(client, params.project_id, attributes, "launchnotes_update_project_custom_code");
 
         if (result.updateProject.errors && result.updateProject.errors.length > 0) {
           const errorMessages = result.updateProject.errors
@@ -310,7 +310,7 @@ Error Handling:
         if (params.supporting_palette !== undefined) attributes.supportingPalette = params.supporting_palette;
         if (params.color_theme !== undefined) attributes.colorTheme = params.color_theme;
 
-        const result = await updateProject(client, params.project_id, attributes);
+        const result = await updateProject(client, params.project_id, attributes, "launchnotes_update_project_colors");
 
         if (result.updateProject.errors && result.updateProject.errors.length > 0) {
           const errorMessages = result.updateProject.errors
@@ -394,7 +394,7 @@ Error Handling:
         if (params.subheading !== undefined) attributes.subheading = params.subheading;
         if (params.slug !== undefined) attributes.slug = params.slug;
 
-        const result = await updateProject(client, params.project_id, attributes);
+        const result = await updateProject(client, params.project_id, attributes, "launchnotes_update_project_content");
 
         if (result.updateProject.errors && result.updateProject.errors.length > 0) {
           const errorMessages = result.updateProject.errors
@@ -475,7 +475,7 @@ Error Handling:
         if (params.voting_enabled !== undefined) attributes.votingEnabled = params.voting_enabled;
         if (params.noindex !== undefined) attributes.noindex = params.noindex;
 
-        const result = await updateProject(client, params.project_id, attributes);
+        const result = await updateProject(client, params.project_id, attributes, "launchnotes_update_project_features");
 
         if (result.updateProject.errors && result.updateProject.errors.length > 0) {
           const errorMessages = result.updateProject.errors

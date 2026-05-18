@@ -12,6 +12,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { createClient } from "./shared/client.js";
+import { MCP_NAME, MCP_VERSION } from "./shared/constants.js";
 import { registerProjectTools } from "./projects/tools.js";
 import { registerAnnouncementTools } from "./announcements/tools.js";
 import { registerFeedbackTools } from "./feedback/tools.js";
@@ -24,10 +25,10 @@ function createServer(apiToken: string): McpServer {
   // Create LaunchNotes client
   const client = createClient(apiToken);
 
-  // Create MCP server with updated API
+  // Create MCP server with dynamic version from package.json
   const server = new McpServer({
-    name: "@launchnotes/mcp",
-    version: "0.1.0",
+    name: MCP_NAME,
+    version: MCP_VERSION,
   });
 
   // Register all project tools
