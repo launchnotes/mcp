@@ -50,7 +50,12 @@ Error Handling:
     },
     async (params: ListTemplatesInput) => {
       try {
-        const result = await listTemplates(client, params.project_id, params.limit);
+        const result = await listTemplates(
+          client,
+          params.project_id,
+          params.limit,
+          "launchnotes_list_templates"
+        );
         const templates = [...result.project.templates.nodes].sort((a, b) =>
           a.name.localeCompare(b.name)
         );

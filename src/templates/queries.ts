@@ -26,7 +26,8 @@ export const LIST_TEMPLATES_QUERY = `
 export async function listTemplates(
   client: GraphQLClient,
   projectId: string,
-  limit?: number
+  limit?: number,
+  toolName?: string
 ): Promise<{
   project: {
     templates: {
@@ -34,8 +35,9 @@ export async function listTemplates(
     };
   };
 }> {
-  return client.execute(LIST_TEMPLATES_QUERY, {
-    projectId,
-    first: limit ?? 100,
-  });
+  return client.execute(
+    LIST_TEMPLATES_QUERY,
+    { projectId, first: limit ?? 100 },
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
 }
