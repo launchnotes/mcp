@@ -35,6 +35,9 @@ import {
 import {
   LIST_TEMPLATES_QUERY,
 } from '../src/templates/queries.js';
+import {
+  CREATE_EXTERNAL_CONTENT_LINK_MUTATION,
+} from '../src/links/queries.js';
 
 describe('Schema Validation (Live Schema)', () => {
   let schema: GraphQLSchema;
@@ -234,6 +237,19 @@ describe('Schema Validation (Live Schema)', () => {
       assert.ok(
         LIST_TEMPLATES_QUERY.includes('archived: false'),
         'Should filter archived: false at the GraphQL level'
+      );
+    });
+  });
+
+  describe('External Content Link Queries', () => {
+    it('CREATE_EXTERNAL_CONTENT_LINK_MUTATION is valid against live schema', () => {
+      const document = parse(CREATE_EXTERNAL_CONTENT_LINK_MUTATION);
+      const errors = validate(schema, document);
+
+      assert.strictEqual(
+        errors.length,
+        0,
+        `Validation errors: ${errors.map(e => e.message).join(', ')}`
       );
     });
   });
