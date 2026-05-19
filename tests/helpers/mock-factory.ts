@@ -61,6 +61,25 @@ export const MockFactory = {
     };
   },
 
+  stage(overrides: Partial<any> = {}) {
+    return {
+      id: 'stage_mock123',
+      name: 'Test Stage',
+      position: 0,
+      ...overrides,
+    };
+  },
+
+  workItem(overrides: Partial<any> = {}) {
+    return {
+      id: 'work_mock123',
+      name: 'Test Work Item',
+      position: 0,
+      stageId: 'stage_mock123',
+      ...overrides,
+    };
+  },
+
   announcementAnalytics(overrides: Partial<any> = {}) {
     return {
       id: 'ann_analytics_123',
