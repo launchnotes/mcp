@@ -36,6 +36,7 @@ if (values['schema-only']) {
     'tests/analytics.test.ts',
     'tests/templates.test.ts',
     'tests/roadmap.test.ts',
+    'tests/links.test.ts',
   ];
 } else {
   console.log('🚀 Running all tests...');
@@ -49,6 +50,7 @@ if (values['schema-only']) {
     'tests/analytics.test.ts',
     'tests/templates.test.ts',
     'tests/roadmap.test.ts',
+    'tests/links.test.ts',
   ];
 }
 

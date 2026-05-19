@@ -40,6 +40,9 @@ import {
   LIST_WORK_ITEMS_QUERY,
   REPOSITION_WORK_ITEM_MUTATION,
 } from '../src/roadmap/queries.js';
+import {
+  CREATE_EXTERNAL_CONTENT_LINK_MUTATION,
+} from '../src/links/queries.js';
 
 describe('Schema Validation (Live Schema)', () => {
   let schema: GraphQLSchema;
@@ -275,6 +278,19 @@ describe('Schema Validation (Live Schema)', () => {
 
     it('REPOSITION_WORK_ITEM_MUTATION is valid against live schema', () => {
       const document = parse(REPOSITION_WORK_ITEM_MUTATION);
+      const errors = validate(schema, document);
+
+      assert.strictEqual(
+        errors.length,
+        0,
+        `Validation errors: ${errors.map(e => e.message).join(', ')}`
+      );
+    });
+  });
+
+  describe('External Content Link Queries', () => {
+    it('CREATE_EXTERNAL_CONTENT_LINK_MUTATION is valid against live schema', () => {
+      const document = parse(CREATE_EXTERNAL_CONTENT_LINK_MUTATION);
       const errors = validate(schema, document);
 
       assert.strictEqual(

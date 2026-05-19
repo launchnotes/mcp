@@ -19,6 +19,7 @@ import { registerFeedbackTools } from "./feedback/tools.js";
 import { registerAnalyticsTools } from "./analytics/tools.js";
 import { registerTemplateTools } from "./templates/tools.js";
 import { registerRoadmapTools } from "./roadmap/tools.js";
+import { registerLinkTools } from "./links/tools.js";
 
 /**
  * Factory function to create a configured MCP server instance
@@ -51,6 +52,9 @@ function createServer(apiToken: string): McpServer {
   // Register all roadmap tools
   registerRoadmapTools(server, client);
 
+  // Register all external content link tools
+  registerLinkTools(server, client);
+
   return server;
 }
 
@@ -64,7 +68,7 @@ async function startStdio(apiToken: string) {
   await server.connect(transport);
 
   console.error("✓ LaunchNotes MCP Server running in stdio mode");
-  console.error("✓ Registered tools: 20 tools (6 project + 7 announcement + 2 feedback + 1 analytics + 1 template + 3 roadmap)");
+  console.error("✓ Registered tools: 21 tools (6 project + 7 announcement + 2 feedback + 1 analytics + 1 template + 3 roadmap + 1 link)");
 }
 
 /**
