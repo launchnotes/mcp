@@ -35,6 +35,11 @@ import {
 import {
   LIST_TEMPLATES_QUERY,
 } from '../src/templates/queries.js';
+import {
+  LIST_STAGES_QUERY,
+  LIST_WORK_ITEMS_QUERY,
+  REPOSITION_WORK_ITEM_MUTATION,
+} from '../src/roadmap/queries.js';
 
 describe('Schema Validation (Live Schema)', () => {
   let schema: GraphQLSchema;
@@ -234,6 +239,48 @@ describe('Schema Validation (Live Schema)', () => {
       assert.ok(
         LIST_TEMPLATES_QUERY.includes('archived: false'),
         'Should filter archived: false at the GraphQL level'
+      );
+    });
+  });
+
+  describe('Roadmap Queries', () => {
+    it('LIST_STAGES_QUERY is valid against live schema', () => {
+      const document = parse(LIST_STAGES_QUERY);
+      const errors = validate(schema, document);
+
+      assert.strictEqual(
+        errors.length,
+        0,
+        `Validation errors: ${errors.map(e => e.message).join(', ')}`
+      );
+    });
+
+    it('LIST_WORK_ITEMS_QUERY is valid against live schema', () => {
+      const document = parse(LIST_WORK_ITEMS_QUERY);
+      const errors = validate(schema, document);
+
+      assert.strictEqual(
+        errors.length,
+        0,
+        `Validation errors: ${errors.map(e => e.message).join(', ')}`
+      );
+    });
+
+    it('LIST_WORK_ITEMS_QUERY excludes archived work items', () => {
+      assert.ok(
+        LIST_WORK_ITEMS_QUERY.includes('archived: false'),
+        'Should filter archived: false at the GraphQL level'
+      );
+    });
+
+    it('REPOSITION_WORK_ITEM_MUTATION is valid against live schema', () => {
+      const document = parse(REPOSITION_WORK_ITEM_MUTATION);
+      const errors = validate(schema, document);
+
+      assert.strictEqual(
+        errors.length,
+        0,
+        `Validation errors: ${errors.map(e => e.message).join(', ')}`
       );
     });
   });
