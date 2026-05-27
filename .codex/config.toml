@@ -1,0 +1,6 @@
+[mcp_servers.launchnotes]
+command = "node"
+args = ["dist/index.js"]
+cwd = "."
+env_vars = ["LAUNCHNOTES_API_TOKEN"]
+startup_timeout_sec = 20

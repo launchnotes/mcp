@@ -39,6 +39,7 @@ import {
   LIST_STAGES_QUERY,
   LIST_WORK_ITEMS_QUERY,
   REPOSITION_WORK_ITEM_MUTATION,
+  CREATE_WORK_ITEM_MUTATION,
 } from '../src/roadmap/queries.js';
 import {
   CREATE_EXTERNAL_CONTENT_LINK_MUTATION,
@@ -278,6 +279,17 @@ describe('Schema Validation (Live Schema)', () => {
 
     it('REPOSITION_WORK_ITEM_MUTATION is valid against live schema', () => {
       const document = parse(REPOSITION_WORK_ITEM_MUTATION);
+      const errors = validate(schema, document);
+
+      assert.strictEqual(
+        errors.length,
+        0,
+        `Validation errors: ${errors.map(e => e.message).join(', ')}`
+      );
+    });
+
+    it('CREATE_WORK_ITEM_MUTATION is valid against live schema', () => {
+      const document = parse(CREATE_WORK_ITEM_MUTATION);
       const errors = validate(schema, document);
 
       assert.strictEqual(

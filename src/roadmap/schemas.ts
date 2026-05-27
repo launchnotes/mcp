@@ -62,3 +62,33 @@ export const MoveWorkItemSchema = z
   .strict();
 
 export type MoveWorkItemInput = z.infer<typeof MoveWorkItemSchema>;
+
+/**
+ * Schema for launchnotes_create_work_item
+ */
+export const CreateWorkItemSchema = z
+  .object({
+    project_id: z
+      .string()
+      .min(1, "Project ID is required")
+      .describe("The ID of the LaunchNotes project"),
+    name: z
+      .string()
+      .min(1, "Work item name is required")
+      .describe("The name/title of the work item"),
+    stage_id: z
+      .string()
+      .min(1, "Stage ID is required")
+      .describe("The ID of the stage to add the work item to"),
+    content_markdown: z
+      .string()
+      .optional()
+      .describe("Description/content in Markdown format"),
+    owner_id: z
+      .string()
+      .optional()
+      .describe("The ID of the user who owns this work item"),
+  })
+  .strict();
+
+export type CreateWorkItemInput = z.infer<typeof CreateWorkItemSchema>;

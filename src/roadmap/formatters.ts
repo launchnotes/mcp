@@ -47,3 +47,18 @@ export function formatMoveWorkItemMarkdown(args: {
   const from = args.sourceStageName ? `from ${args.sourceStageName} ` : "";
   return `✓ Moved '${args.workItemName}' ${from}→ ${args.targetStageName}.`;
 }
+
+export function formatCreateWorkItemMarkdown(workItem: {
+  id: string;
+  name: string;
+  stageId: string;
+  createdAt: string;
+}): string {
+  return `✓ Successfully created work item "${workItem.name}"
+
+**ID:** ${workItem.id}
+**Stage ID:** ${workItem.stageId}
+**Created:** ${workItem.createdAt}
+
+The work item has been added to the roadmap.`;
+}
