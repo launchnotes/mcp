@@ -7,12 +7,7 @@
   "bin": {
     "launchnotes-mcp": "dist/index.js"
   },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE",
-    "USAGE.md"
-  ],
+  "files": ["dist", "README.md", "LICENSE", "USAGE.md"],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
