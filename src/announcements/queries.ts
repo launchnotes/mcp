@@ -54,17 +54,6 @@ export const GET_ANNOUNCEMENT_QUERY = `
         name
         color
       }
-      emailAnalytics {
-        sentCount
-        openRate
-        clickRate
-        clickToOpenRate
-      }
-      viewerAnalytics {
-        totalUniqueSubscribersCount
-        totalUniqueAnonymousCount
-        totalUniqueEmbeddedCount
-      }
     }
   }
 `;
