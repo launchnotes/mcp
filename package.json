@@ -1,13 +1,18 @@
 {
   "name": "@launchnotes/mcp",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "MCP server for the LaunchNotes API",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
     "launchnotes-mcp": "dist/index.js"
   },
-  "files": ["dist", "README.md", "LICENSE", "USAGE.md"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "USAGE.md"
+  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
