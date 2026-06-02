@@ -30,6 +30,9 @@ export LAUNCHNOTES_API_TOKEN='your-token-here'
 
 Get your API token from LaunchNotes Settings → API. Use a Management token for read/write operations or a Public token for read-only access.
 
+### Mise
+There are two files, mise.toml and mise.local.toml that define our env, tools and tasks.
+
 ## Architecture
 
 ### Core Design Patterns

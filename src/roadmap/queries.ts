@@ -59,6 +59,24 @@ export const REPOSITION_WORK_ITEM_MUTATION = `
   }
 `;
 
+export const CREATE_WORK_ITEM_MUTATION = `
+  mutation CreateWorkItem($input: CreateWorkItemInput!) {
+    createWorkItem(input: $input) {
+      workItem {
+        id
+        name
+        stageId
+        position
+        createdAt
+      }
+      errors {
+        message
+        path
+      }
+    }
+  }
+`;
+
 export async function listStages(
   client: GraphQLClient,
   projectId: string,
@@ -127,6 +145,36 @@ export async function repositionWorkItem(
           id: workItemId,
           targetStageId,
         },
+      },
+    },
+    toolName ? { "X-LN-MCP-Tool": toolName } : undefined
+  );
+}
+
+export async function createWorkItem(
+  client: GraphQLClient,
+  attributes: Record<string, unknown>,
+  toolName?: string
+): Promise<{
+  createWorkItem: {
+    workItem?: {
+      id: string;
+      name: string;
+      stageId: string;
+      position: number;
+      createdAt: string;
+    };
+    errors?: Array<{
+      message: string;
+      path?: string[];
+    }>;
+  };
+}> {
+  return client.execute(
+    CREATE_WORK_ITEM_MUTATION,
+    {
+      input: {
+        workItem: attributes,
       },
     },
     toolName ? { "X-LN-MCP-Tool": toolName } : undefined

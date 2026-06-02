@@ -13,6 +13,7 @@ import {
   formatStageListMarkdown,
   formatWorkItemListMarkdown,
   formatMoveWorkItemMarkdown,
+  formatCreateWorkItemMarkdown,
 } from '../src/roadmap/formatters.js';
 import { MockFactory } from './helpers/mock-factory.js';
 
@@ -202,6 +203,147 @@ describe('Roadmap Operations (Mocked)', () => {
         targetStageName: 'Shipped',
       });
       assert.strictEqual(out, "✓ Moved 'Auth' → Shipped.");
+    });
+  });
+
+  describe('createWorkItem', () => {
+    it('passes required fields to the mutation', async () => {
+      let capturedVariables: any;
+      mockExecute = mock.fn(async (_q: string, vars: any) => {
+        capturedVariables = vars;
+        return {
+          createWorkItem: {
+            workItem: MockFactory.workItem({ name: 'New Feature', stageId: 'stage_abc' }),
+            errors: [],
+          },
+        };
+      });
+      GraphQLClient.prototype.execute = mockExecute;
+
+      const client = new GraphQLClient('mock-token');
+      await RoadmapQueries.createWorkItem(client, {
+        name: 'New Feature',
+        stageId: 'stage_abc',
+      });
+
+      const sent = capturedVariables.input.workItem;
+      assert.strictEqual(sent.projectId, undefined);
+      assert.strictEqual(sent.name, 'New Feature');
+      assert.strictEqual(sent.stageId, 'stage_abc');
+    });
+
+    it('passes optional contentMarkdown field', async () => {
+      let capturedVariables: any;
+      mockExecute = mock.fn(async (_q: string, vars: any) => {
+        capturedVariables = vars;
+        return {
+          createWorkItem: {
+            workItem: MockFactory.workItem(),
+            errors: [],
+          },
+        };
+      });
+      GraphQLClient.prototype.execute = mockExecute;
+
+      const client = new GraphQLClient('mock-token');
+      await RoadmapQueries.createWorkItem(client, {
+        name: 'New Feature',
+        stageId: 'stage_abc',
+        contentMarkdown: '# Description\n\nThis is markdown content',
+      });
+
+      const sent = capturedVariables.input.workItem;
+      assert.strictEqual(sent.contentMarkdown, '# Description\n\nThis is markdown content');
+    });
+
+    it('passes optional ownerId field', async () => {
+      let capturedVariables: any;
+      mockExecute = mock.fn(async (_q: string, vars: any) => {
+        capturedVariables = vars;
+        return {
+          createWorkItem: {
+            workItem: MockFactory.workItem(),
+            errors: [],
+          },
+        };
+      });
+      GraphQLClient.prototype.execute = mockExecute;
+
+      const client = new GraphQLClient('mock-token');
+      await RoadmapQueries.createWorkItem(client, {
+        name: 'New Feature',
+        stageId: 'stage_abc',
+        ownerId: 'user_xyz',
+      });
+
+      const sent = capturedVariables.input.workItem;
+      assert.strictEqual(sent.ownerId, 'user_xyz');
+    });
+
+    it('returns created work item with id and metadata', async () => {
+      mockExecute = mock.fn(async () => ({
+        createWorkItem: {
+          workItem: {
+            id: 'work_new123',
+            name: 'New Feature',
+            stageId: 'stage_abc',
+            position: 5,
+            createdAt: '2025-01-15T12:00:00Z',
+          },
+          errors: [],
+        },
+      }));
+      GraphQLClient.prototype.execute = mockExecute;
+
+      const client = new GraphQLClient('mock-token');
+      const result = await RoadmapQueries.createWorkItem(client, {
+        name: 'New Feature',
+        stageId: 'stage_abc',
+      });
+
+      assert.strictEqual(result.createWorkItem.workItem?.id, 'work_new123');
+      assert.strictEqual(result.createWorkItem.workItem?.name, 'New Feature');
+      assert.strictEqual(result.createWorkItem.workItem?.stageId, 'stage_abc');
+      assert.strictEqual(result.createWorkItem.workItem?.createdAt, '2025-01-15T12:00:00Z');
+    });
+
+    it('returns errors when mutation fails', async () => {
+      mockExecute = mock.fn(async () => ({
+        createWorkItem: {
+          workItem: null,
+          errors: [
+            { message: 'Stage not found', path: ['stageId'] },
+          ],
+        },
+      }));
+      GraphQLClient.prototype.execute = mockExecute;
+
+      const client = new GraphQLClient('mock-token');
+      const result = await RoadmapQueries.createWorkItem(client, {
+        name: 'New Feature',
+        stageId: 'invalid_stage',
+      });
+
+      assert.strictEqual(result.createWorkItem.workItem, null);
+      assert.strictEqual(result.createWorkItem.errors?.length, 1);
+      assert.strictEqual(result.createWorkItem.errors?.[0].message, 'Stage not found');
+    });
+  });
+
+  describe('formatCreateWorkItemMarkdown', () => {
+    it('renders success message with work item details', () => {
+      const out = formatCreateWorkItemMarkdown({
+        id: 'work_new123',
+        name: 'New Feature',
+        stageId: 'stage_abc',
+        createdAt: '2025-01-15T12:00:00Z',
+      });
+
+      assert.ok(out.includes('✓ Successfully created work item "New Feature"'));
+      assert.ok(out.includes('**ID:** work_new123'));
+      assert.ok(out.includes('**Stage ID:** stage_abc'));
+      assert.ok(out.includes('**Created:** 2025-01-15T12:00:00Z'));
+      assert.ok(out.includes('The work item has been added to the roadmap.'));
     });
   });
 });
