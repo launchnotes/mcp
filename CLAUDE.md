@@ -4,7 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is an MCP (Model Context Protocol) server that provides tools for managing LaunchNotes projects and announcements through their GraphQL API. The server exposes 13 tools (6 for project management, 7 for announcement management).
+This is an MCP (Model Context Protocol) server that provides tools for managing LaunchNotes projects and announcements through their GraphQL API. The server exposes 22 tools across 7 resource categories:
+
+- **Projects** (6 tools) - Project configuration and management
+- **Announcements** (7 tools) - Announcement lifecycle management
+- **Feedback** (2 tools) - Customer feedback search and retrieval
+- **Analytics** (1 tool) - Performance metrics and top announcements
+- **Templates** (1 tool) - Announcement template management
+- **Roadmap** (4 tools) - Roadmap stages and work item management
+- **Links** (1 tool) - External content attachments
 
 The server uses stdio transport for command-line MCP clients like Claude Desktop.
 
@@ -33,17 +41,57 @@ Get your API token from LaunchNotes Settings → API. Use a Management token for
 ### Mise
 There are two files, mise.toml and mise.local.toml that define our env, tools and tasks.
 
+## Available Tools
+
+The server provides 22 tools organized into 7 resource categories. Each tool is prefixed with `launchnotes_` for easy identification.
+
+### Projects (6 tools)
+- **`launchnotes_get_project`** - Retrieve complete project details including all customization settings, colors, custom code, and feature flags
+- **`launchnotes_list_projects`** - List all LaunchNotes projects accessible with the current API token
+- **`launchnotes_update_project_custom_code`** - Update custom CSS, HTML head, header, footer, or index hero for a project
+- **`launchnotes_update_project_colors`** - Update color palette and theme (all colors in hex format)
+- **`launchnotes_update_project_content`** - Update project title, description, headings, and slug
+- **`launchnotes_update_project_features`** - Enable/disable features (feedback, roadmap, ideas, RSS, voting, SEO indexing)
+
+### Announcements (7 tools)
+- **`launchnotes_list_announcements`** - List announcements with filtering by state and ordering options
+- **`launchnotes_get_announcement`** - Retrieve complete details for a specific announcement
+- **`launchnotes_create_announcement`** - Create a new draft announcement (supports Markdown, HTML, or Jira syntax)
+- **`launchnotes_update_announcement`** - Update an existing announcement's content, metadata, or categorization
+- **`launchnotes_publish_announcement`** - Publish an announcement immediately
+- **`launchnotes_schedule_announcement`** - Schedule an announcement for automatic future publishing
+- **`launchnotes_archive_announcement`** - Archive an announcement (removes from active list while preserving content)
+
+### Feedback (2 tools)
+- **`launchnotes_search_feedback`** - Search and filter customer feedback by sentiment, importance, organized state, starred status
+- **`launchnotes_get_feedback`** - Retrieve complete details for a specific feedback item
+
+### Analytics (1 tool)
+- **`launchnotes_get_top_announcements`** - Get top-performing announcements ranked by various metrics (engagement, open rate, click rate, feedback count, sentiment)
+
+### Templates (1 tool)
+- **`launchnotes_list_templates`** - List available announcement templates for a project
+
+### Roadmap (4 tools)
+- **`launchnotes_list_stages`** - List roadmap stages in their on-roadmap order
+- **`launchnotes_list_work_items`** - List work items on the roadmap, optionally filtered by stage
+- **`launchnotes_move_work_item`** - Move a work item between roadmap stages
+- **`launchnotes_create_work_item`** - Create a new work item on the roadmap
+
+### Links (1 tool)
+- **`launchnotes_create_external_content_link`** - Attach supporting links (blog posts, docs, videos) to announcements
+
 ## Architecture
 
 ### Core Design Patterns
 
 **Resource-Based Module Organization:**
-- Each resource (projects, announcements) is a self-contained module
+- Each resource (projects, announcements, feedback, analytics, templates, roadmap, links) is a self-contained module
 - Shared infrastructure (GraphQL client, constants) in `src/shared/`
 - Single GraphQL client with `execute()` method used by all resources
 
 **Per-Resource Architecture:**
-Each resource module (`src/projects/`, `src/announcements/`) contains:
+Each resource module (`src/projects/`, `src/announcements/`, `src/feedback/`, etc.) contains:
 1. **types.ts**: TypeScript interfaces for the resource
 2. **queries.ts**: GraphQL query strings + operation functions
 3. **schemas.ts**: Zod schemas for input validation
@@ -143,7 +191,7 @@ export function registerProjectTools(server: McpServer, client: GraphQLClient) {
 
 ```
 src/
-├── index.ts              # Server initialization and tool registration
+├── index.ts              # Server initialization and tool registration (22 tools)
 │
 ├── shared/               # Shared infrastructure
 │   ├── client.ts         # Single GraphQL client with execute() method
@@ -157,12 +205,47 @@ src/
 │   ├── formatters.ts     # Markdown/JSON formatting
 │   └── tools.ts          # MCP tool registrations (6 tools)
 │
-└── announcements/        # Announcement resource module
-    ├── types.ts          # Announcement TypeScript interfaces
+├── announcements/        # Announcement resource module
+│   ├── types.ts          # Announcement TypeScript interfaces
+│   ├── queries.ts        # GraphQL queries + operation functions
+│   ├── schemas.ts        # Zod validation schemas (7 tools)
+│   ├── formatters.ts     # Markdown/JSON formatting
+│   └── tools.ts          # MCP tool registrations (7 tools)
+│
+├── feedback/             # Feedback resource module
+│   ├── types.ts          # Feedback TypeScript interfaces
+│   ├── queries.ts        # GraphQL queries + operation functions
+│   ├── schemas.ts        # Zod validation schemas (2 tools)
+│   ├── formatters.ts     # Markdown/JSON formatting
+│   └── tools.ts          # MCP tool registrations (2 tools)
+│
+├── analytics/            # Analytics resource module
+│   ├── types.ts          # Analytics TypeScript interfaces
+│   ├── queries.ts        # GraphQL queries + operation functions
+│   ├── schemas.ts        # Zod validation schemas (1 tool)
+│   ├── formatters.ts     # Markdown/JSON formatting
+│   └── tools.ts          # MCP tool registrations (1 tool)
+│
+├── templates/            # Templates resource module
+│   ├── types.ts          # Template TypeScript interfaces
+│   ├── queries.ts        # GraphQL queries + operation functions
+│   ├── schemas.ts        # Zod validation schemas (1 tool)
+│   ├── formatters.ts     # Markdown/JSON formatting
+│   └── tools.ts          # MCP tool registrations (1 tool)
+│
+├── roadmap/              # Roadmap resource module
+│   ├── types.ts          # Roadmap TypeScript interfaces
+│   ├── queries.ts        # GraphQL queries + operation functions
+│   ├── schemas.ts        # Zod validation schemas (4 tools)
+│   ├── formatters.ts     # Markdown/JSON formatting
+│   └── tools.ts          # MCP tool registrations (4 tools)
+│
+└── links/                # Links resource module
+    ├── types.ts          # Link TypeScript interfaces
     ├── queries.ts        # GraphQL queries + operation functions
-    ├── schemas.ts        # Zod validation schemas (7 tools)
+    ├── schemas.ts        # Zod validation schemas (1 tool)
     ├── formatters.ts     # Markdown/JSON formatting
-    └── tools.ts          # MCP tool registrations (7 tools)
+    └── tools.ts          # MCP tool registrations (1 tool)
 ```
 
 ## Adding New Tools
@@ -221,8 +304,8 @@ Follow this workflow when adding new functionality:
 
 ### Adding New Resource Category
 
-Create a new directory `src/categories/` with:
-1. `types.ts` - Category interfaces
+Create a new directory following the established pattern (e.g., `src/feedback/`, `src/roadmap/`, `src/analytics/`) with:
+1. `types.ts` - Resource interfaces
 2. `queries.ts` - GraphQL operations
 3. `schemas.ts` - Zod validation
 4. `formatters.ts` - Formatting functions
@@ -230,10 +313,21 @@ Create a new directory `src/categories/` with:
 
 Then register in `src/index.ts`:
 ```typescript
-import { registerCategoryTools } from "./categories/tools.js";
-// ...
-registerCategoryTools(server, client);
+import { registerFeedbackTools } from "./feedback/tools.js";
+import { registerRoadmapTools } from "./roadmap/tools.js";
+// ... other imports
+
+// In the server initialization:
+registerFeedbackTools(server, client);
+registerRoadmapTools(server, client);
 ```
+
+Example from the Roadmap module:
+- `src/roadmap/types.ts` - Defines `Stage`, `WorkItem` interfaces
+- `src/roadmap/queries.ts` - Contains `LIST_STAGES_QUERY`, `MOVE_WORK_ITEM_MUTATION`
+- `src/roadmap/schemas.ts` - Defines `ListStagesSchema`, `MoveWorkItemSchema`
+- `src/roadmap/formatters.ts` - Implements `formatStagesMarkdown()`, `formatWorkItemsMarkdown()`
+- `src/roadmap/tools.ts` - Registers 4 tools with proper annotations
 
 ## Common Patterns
 

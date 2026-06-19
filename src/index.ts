@@ -68,7 +68,7 @@ async function startStdio(apiToken: string) {
   await server.connect(transport);
 
   console.error("✓ LaunchNotes MCP Server running in stdio mode");
-  console.error("✓ Registered tools: 21 tools (6 project + 7 announcement + 2 feedback + 1 analytics + 1 template + 3 roadmap + 1 link)");
+  console.error("✓ Registered tools: 22 tools (6 project + 7 announcement + 2 feedback + 1 analytics + 1 template + 4 roadmap + 1 link)");
 }
 
 /**
