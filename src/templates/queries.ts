@@ -14,7 +14,6 @@ export const LIST_TEMPLATES_QUERY = `
           name
           headline
           description
-          excerpt
           createdAt
           updatedAt
         }

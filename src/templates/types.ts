@@ -7,7 +7,6 @@ export interface LaunchNotesTemplate {
   name: string;
   headline?: string;
   description?: string;
-  excerpt?: string;
   createdAt: string;
   updatedAt: string;
 }
