@@ -1,5 +1,12 @@
 # LaunchNotes MCP Server
 
+> [!WARNING]
+> **This server is frozen.** LaunchNotes MCP is now a **hosted** server — you log in with your LaunchNotes account (no API token), and your assistant acts as *you* with your role's permissions, plus a bigger tool set and **skills**.
+>
+> **→ Get the new version: [launchnotes/mcp-server-guide](https://github.com/launchnotes/mcp-server-guide)** — one install for Claude Code, Claude Desktop, and Cursor.
+>
+> This npm/stdio server keeps working and stays **supported for scripting & automation**, but it gets no new tools or fixes.
+
 An MCP (Model Context Protocol) server for managing LaunchNotes projects and announcements through the GraphQL API. Uses stdio transport for Claude Desktop and other MCP clients.
 
 ## Features
@@ -30,7 +37,9 @@ An MCP (Model Context Protocol) server for managing LaunchNotes projects and ann
 
 ## Installation
 
-### From npm (Recommended)
+> **For everyday use** in Claude Code, Claude Desktop, or Cursor, use the new hosted server — see **[launchnotes/mcp-server-guide](https://github.com/launchnotes/mcp-server-guide)**. The steps below are the legacy npm/stdio path, kept for **scripting & automation**.
+
+### From npm (legacy)
 
 ```bash
 npm install -g @launchnotes/mcp
