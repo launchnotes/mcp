@@ -43,7 +43,7 @@ Error Handling:
       inputSchema: CreateExternalContentLinkSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },

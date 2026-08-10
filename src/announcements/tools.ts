@@ -230,7 +230,7 @@ Error Handling:
       inputSchema: CreateAnnouncementSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
@@ -324,7 +324,7 @@ Error Handling:
       inputSchema: UpdateAnnouncementSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
@@ -416,7 +416,7 @@ Error Handling:
       inputSchema: PublishAnnouncementSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
@@ -496,7 +496,7 @@ Error Handling:
       inputSchema: ScheduleAnnouncementSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
@@ -576,7 +576,7 @@ Error Handling:
       inputSchema: ArchiveAnnouncementSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },

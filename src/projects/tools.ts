@@ -203,7 +203,7 @@ Error Handling:
       inputSchema: UpdateProjectCustomCodeSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
@@ -290,7 +290,7 @@ Error Handling:
       inputSchema: UpdateProjectColorsSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
@@ -378,7 +378,7 @@ Error Handling:
       inputSchema: UpdateProjectContentSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
@@ -459,7 +459,7 @@ Error Handling:
       inputSchema: UpdateProjectFeaturesSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },

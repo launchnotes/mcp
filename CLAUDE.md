@@ -183,7 +183,7 @@ export function registerProjectTools(server: McpServer, client: GraphQLClient) {
 
 **Tool Annotations:** Always set these metadata flags:
 - `readOnlyHint`: true for read operations, false for mutations
-- `destructiveHint`: false (LaunchNotes API doesn't support destructive operations like delete)
+- `destructiveHint`: true for write operations (mutations that modify or create data), false for read operations. Note: the MCP spec default is true; we explicitly set false only on read tools.
 - `idempotentHint`: true for reads, false for writes
 - `openWorldHint`: true (tools work with any valid project/announcement)
 

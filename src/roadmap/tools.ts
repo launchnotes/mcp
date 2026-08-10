@@ -186,7 +186,7 @@ Error Handling:
       inputSchema: MoveWorkItemSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
@@ -264,7 +264,7 @@ Error Handling:
       inputSchema: CreateWorkItemSchema,
       annotations: {
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
